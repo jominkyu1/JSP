@@ -3,7 +3,7 @@
  <%
  	request.setCharacterEncoding("UTF-8");
  %>
- <jsp:useBean id="m" class="net.dauum.vo.MemVO"></jsp:useBean>
+ <jsp:useBean id="m" class="net.daum.vo.MemVO"></jsp:useBean>
  <%--jsp:useBean 액션태그로 MemVO빈클래스의 객체명 m을 생성한다. --%>
  
  <jsp:setProperty name="m" property="*" />

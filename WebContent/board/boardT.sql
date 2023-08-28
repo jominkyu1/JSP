@@ -10,9 +10,10 @@ create table boardT (
 );
 
 SELECT * from boardT order by bno desc;
-
+ 
 --bno_seq25 sequence
 create sequence bno_seq25 start with 1 INCREMENT by 1 nocache;
 
 --bno_seq25 시퀀스 다음 번호 확인
 select bno_seq25.nextval from dual;
+
