@@ -1,12 +1,38 @@
+<%@page import="net.daum.vo.GuestVO"%>
+<%@page import="net.daum.dao.GuestDAOImpl"%>
 <%@ page contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%
+    	request.setCharacterEncoding("UTF-8");
+		int gno = Integer.parseInt(request.getParameter("bno"));
+    %>
 <!DOCTYPE html>
 <html>
 <head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <meta charset="UTF-8">
-<title></title>
+<title>방명록 작성</title>
 </head>
+ <script>
+        function validForm() {
+            var gn = $('#gname').val().trim();
+            var gt = $('#gtitle').val().trim();
+            var gc = $('#gcont').val().trim();
+            
+            if (gn === "" || gt === "" || gc === "") {
+                alert('값이 모두 입력되지 않았습니다.');
+                return false;
+            }
+        }
+ </script>
 <body>
+	<form method="post" action="guest_write_ok.jsp" onsubmit="return validForm();">
+		<input type="hidden" name="gno" value="<%=gno%>">
+		이름: <input type="text" name="gname" id="gname"> <br><br>
+		제목: <input type="text" name="gtitle" id="gtitle"> <br><br>
+		내용: <textarea name="gcont" cols="20" rows="15" id="gcont"></textarea> <br><hr>
+		<input type="submit" value="확인">
+	</form>
 <%-- 문제 겸 과제물) 
 	1. 방명록 글쓴이, 글제목, 글내용을 입력할 수 있는 폼 입력창 guest_write.jsp를 작성하고,
 		유효성 검증처리를 jQuery, JavaScript를 사용하여 처리한다.
@@ -36,7 +62,6 @@
 	7. net.daum.dao패키지에 오라클 DB연동 클래스 Guest24DAOImpl.java를 작성 
 	
 	방명록 저장 메서드 public int insertGuest(GuestVO g){}
-	방명록 목록 메서드 public list<GuestVO> getGuList(){}
- --%>
+	방명록 목록 메서드 public list<GuestVO> getGuList(){} --%>
 </body>
 </html>

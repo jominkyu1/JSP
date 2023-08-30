@@ -1,35 +1,21 @@
 package net.daum.dao;
 
-import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
 import net.daum.vo.BoardVO;
 
-public class BoardDAOImpl {
-	String driver = "oracle.jdbc.OracleDriver";
-	String url = "jdbc:oracle:thin:@localhost:1521:xe";
-	//오라클 접속주소
-	String user = "night";
-	String pwd = "123456";
-	
-	Connection con = null;
-	PreparedStatement ps = null;
-	ResultSet rs = null;
+public class BoardDAOImpl extends DAOController {
 	String sql = null;
 	
 	public List<BoardVO> getBoardList(){
 		List<BoardVO> blist = new ArrayList<>();
 		
 		try {
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, user, pwd);
 			sql = "select * from boardT order by bno desc";
-			ps = con.prepareStatement(sql);
-			
+			ps = connectInit(sql);
 			rs = ps.executeQuery();
 			
 			while (rs.next()) {
@@ -54,10 +40,8 @@ public class BoardDAOImpl {
 	
 	public void updateHit(int bno) {
 		try {
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, user, pwd);
 			sql = "update boardT set bhit = bhit+1 where bno = ?";
-			ps = con.prepareStatement(sql);
+			ps = connectInit(sql);
 			ps.setInt(1, bno);
 			Long i = ps.executeLargeUpdate(); // 업데이트 성공한 레코드 행의 개수를 반환
 			
@@ -72,11 +56,8 @@ public class BoardDAOImpl {
 		BoardVO b=null;
 		
 		try {
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, user, pwd);
 			sql = "select * from boardT where bno=?";
-			
-			ps = con.prepareStatement(sql);
+			ps = connectInit(sql);
 			ps.setInt(1, bno);
 			
 			rs = ps.executeQuery();
@@ -100,10 +81,9 @@ public class BoardDAOImpl {
 	
 	public int editBoard(BoardVO b) {
 		try {
-			connectInit();
 			sql = "update boardT set bname=?, btitle=?, bcont=? where bno=?";
 			
-			ps = con.prepareStatement(sql);
+			ps = connectInit(sql);
 			ps.setString(1, b.getBname());
 			ps.setString(2, b.getBtitle());
 			ps.setString(3, b.getBcont());
@@ -121,10 +101,8 @@ public class BoardDAOImpl {
 	
 	public int delBoard(int bno) {
 		try {
-			connectInit();
 			sql = "delete from boardT where bno=?";
-			
-			ps = con.prepareStatement(sql);
+			ps = connectInit(sql);
 			ps.setInt(1, bno);
 			return ps.executeUpdate();
 		} catch(Exception e) {
@@ -133,25 +111,5 @@ public class BoardDAOImpl {
 			connectClose();
 		}
 		return -1;
-	}
-	
-	
-	public void connectClose() {
-		try {
-			if(ps != null) ps.close();
-			if(con != null) con.close();
-			if(rs != null) rs.close();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
-	}
-	
-	public void connectInit() {
-		try {
-			Class.forName(driver);
-			con = DriverManager.getConnection(url, user, pwd);
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 }
